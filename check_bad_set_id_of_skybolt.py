@@ -1,5 +1,5 @@
 import csv
-from pprint import pprint
+from collections import OrderedDict
 from itertools import groupby
 
 
@@ -8,7 +8,7 @@ FILE_NAME = 'Skybolt.csv'
 
 with open(FILE_NAME) as csvfile:
     reader = csv.DictReader(csvfile)
-    set_of_set_id = {}
+    set_of_set_id = OrderedDict()
     result = []
     for row in reader:
         if row['SETSID'] not in set_of_set_id:
@@ -19,7 +19,7 @@ with open(FILE_NAME) as csvfile:
     for key, value in set_of_set_id.items():
         is_bad = False
         for text, group in groupby(value):
-            if text == 'T' and sum(1 for _ in group) >= 3:
+            if text in ['T', '4'] and sum(1 for _ in group) >= 3:
                 is_bad = True
                 break
         result.append({
